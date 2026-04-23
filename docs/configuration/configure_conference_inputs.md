@@ -20,9 +20,9 @@ Configure your inputs on the Splunk platform instance responsible for collecting
 
 Configure your inputs using Splunk Web on the Splunk platform instance responsible for collecting data for this add-on, usually a heavy forwarder.
 
-1. In the Pexip Add-on for Splunk, click **Inputs > Create New Input > Conference**.
+1. In the Pexip Add-on for Splunk, select **Inputs > Create New Input > Conference**.
 2. Enter the parameter values using information provided in the input parameter table below.
-3. Click **Add**.
+3. Select **Add**.
 4. Verify that data is successfully arriving by running the following searches on your search head:
 
 ```bash

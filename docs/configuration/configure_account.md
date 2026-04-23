@@ -15,9 +15,9 @@ You must configure at least one account in the Pexip Add-on for Splunk.
 ## Set up the add-on using Splunk Web
 
 1. Go to the Splunk Web home screen.
-2. Click on *Pexip Add-on for Splunk* in the left navigation banner.
-3. Click on the **Configuration** tab.
-4. Under the *Account* section, click on *Add* and fill in the fields. Use the parameters you configured for the application (see [Configure an integration application in Pexip Infinity for the Pexip Add-on for Splunk](./configure_pexip.md)) where:
+2. Select *Pexip Add-on for Splunk* in the left navigation banner.
+3. Select the **Configuration** tab.
+4. Under the *Account* section, select on *Add* and fill in the fields. Use the parameters you configured for the application (see [Configure an integration application in Pexip Infinity for the Pexip Add-on for Splunk](./configure_pexip.md)) where:
 
    - **Name** is the name given to the Account.
    - **Hostname** is the Pexip hostname (e.g. `mydomain.pexip`).
@@ -28,4 +28,4 @@ You must configure at least one account in the Pexip Add-on for Splunk.
      - [OAuth2] **Client Secret** is the registered application private key for the corresponding application.
      - [OAuth2] **Endpoint** is the domain name used for the token acquisition. Example: `yourdomain.login.pexip.com`. It could match the `Hostname`.
 
-5. Click **Add** to add the account to your local configuration.
+5. Select **Add** to add the account to your local configuration.

@@ -6,14 +6,14 @@ sidebar_label: "Install"
 # Install the Pexip Add-on for Splunk
 
 You can install the Pexip Add-on for Splunk with Splunk Web or from the command line. You can install the add-on onto any type
-of Splunk Enterprise or Splunk Cloud instance (indexer, search head, or forwarder).
+of Splunk Enterprise or Splunk Cloud Platform instance (indexer, search head, or forwarder).
 
 1. Download the [Pexip Add-on for Splunk](https://splunk-platform-apps.github.io/pexip_add-on_for_splunk/releases) from GitHub.
 2. Determine where and how to install this add-on in your deployment.
 3. Perform any prerequisite steps before installing.
 4. Complete your installation.
 
-If you need step-by-step instructions on how to install an add-on in your specific deployment environment, see the [installation walkthrough](#installation-walkthrough) section at the bottom of this page for links to installation instructions specific to a single-instance deployment, distributed deployment, or Splunk Cloud.
+If you need step-by-step instructions on how to install an add-on in your specific deployment environment, see the [installation walkthrough](#installation-walkthrough) section at the bottom of this page for links to installation instructions specific to a single-instance deployment, distributed deployment, or Splunk Cloud Platform.
 
 
 ## Splunk admin requirements
@@ -47,4 +47,4 @@ See [Installing add-ons](https://docs.splunk.com/Documentation/AddOns/released/O
 
 - [Single-instance Splunk Enterprise](http://docs.splunk.com/Documentation/AddOns/released/Overview/Singleserverinstall)
 - [Distributed Splunk Enterprise](https://docs.splunk.com/Documentation/AddOns/released/Overview/Distributedinstall)
-- [Splunk Cloud](https://docs.splunk.com/Documentation/AddOns/released/Overview/SplunkCloudinstall)
+- [Splunk Cloud Platform](https://docs.splunk.com/Documentation/AddOns/released/Overview/SplunkCloudinstall)
