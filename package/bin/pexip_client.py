@@ -6,7 +6,7 @@ from httplib2 import Http, ProxyInfo
 from typing import List
 from urllib.parse import urlparse, urlunparse, urlencode
 
-from constants import MANAGEMENT_API, STATUS_RESOURCES, HISTORY_RESOURCES
+from constants import STATUS_RESOURCES, HISTORY_RESOURCES
 from oauth_helper import BasicAuth, OAuth
 
 

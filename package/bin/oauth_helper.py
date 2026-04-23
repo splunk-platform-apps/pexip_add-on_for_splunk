@@ -116,10 +116,10 @@ class OAuth(Auth):
         :return: formatted private key
         """
         pem_string = pem_string.strip()
-        begin_marker = "-----BEGIN PRIVATE KEY-----" # pragma: allowlist secret
-        begin_rsa_marker = "-----BEGIN RSA PRIVATE KEY-----" # pragma: allowlist secret
-        end_marker = "-----END PRIVATE KEY-----" # pragma: allowlist secret
-        end_rsa_marker = "-----END RSA PRIVATE KEY-----" # pragma: allowlist secret
+        begin_marker = "-----BEGIN PRIVATE KEY-----"  # pragma: allowlist secret
+        begin_rsa_marker = "-----BEGIN RSA PRIVATE KEY-----"  # pragma: allowlist secret
+        end_marker = "-----END PRIVATE KEY-----"  # pragma: allowlist secret
+        end_rsa_marker = "-----END RSA PRIVATE KEY-----"  # pragma: allowlist secret
 
         # Determine which type of PEM it is
         if begin_marker in pem_string and end_marker in pem_string:
@@ -240,4 +240,4 @@ class BasicAuth(Auth):
         self.token = base64.b64encode(connect_string.encode("ascii")).decode("ascii")
 
     def get_header(self) -> dict:
-        return { "Authorization": f"Basic {self.token}" }
+        return {"Authorization": f"Basic {self.token}"}
