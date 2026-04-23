@@ -4,7 +4,7 @@ import uuid
 import logging
 import base64
 from httplib2 import Http, ProxyInfo, socks
-from urllib.parse import urlparse, urlencode
+from urllib.parse import urlencode
 from datetime import datetime, timedelta, timezone
 from solnlib.utils import is_true
 
@@ -14,13 +14,13 @@ from cryptography.hazmat.backends import default_backend
 
 # Map for available proxy type
 _PROXY_TYPE_MAP = {
-    'http': socks.PROXY_TYPE_HTTP,
-    'socks4': socks.PROXY_TYPE_SOCKS4,
-    'socks5': socks.PROXY_TYPE_SOCKS5,
+    "http": socks.PROXY_TYPE_HTTP,
+    "socks4": socks.PROXY_TYPE_SOCKS4,
+    "socks5": socks.PROXY_TYPE_SOCKS5,
 }
 
-if hasattr(socks, 'PROXY_TYPE_HTTP_NO_TUNNEL'):
-    _PROXY_TYPE_MAP['http_no_tunnel'] = socks.PROXY_TYPE_HTTP_NO_TUNNEL
+if hasattr(socks, "PROXY_TYPE_HTTP_NO_TUNNEL"):
+    _PROXY_TYPE_MAP["http_no_tunnel"] = socks.PROXY_TYPE_HTTP_NO_TUNNEL
 
 
 class Auth(object):
@@ -37,22 +37,22 @@ class Auth(object):
         :param proxy_config: the settings conf file
         :return: proxy information
         """
-        if not proxy_config or not is_true(proxy_config.get('proxy_enabled')):
+        if not proxy_config or not is_true(proxy_config.get("proxy_enabled")):
             self.logger.info("Proxy is not enabled")
             return None
 
-        url = proxy_config.get('proxy_url')
-        port = proxy_config.get('proxy_port')
+        url = proxy_config.get("proxy_url")
+        port = proxy_config.get("proxy_port")
 
-        user = proxy_config.get('proxy_username')
-        password = proxy_config.get('proxy_password')
+        user = proxy_config.get("proxy_username")
+        password = proxy_config.get("proxy_password")
 
         if not all((user, password)):
             self.logger.info("Proxy has no credentials found")
             user, password = None, None
 
-        proxy_type = proxy_config.get('proxy_type')
-        proxy_type = proxy_type.lower() if proxy_type else 'http'
+        proxy_type = proxy_config.get("proxy_type")
+        proxy_type = proxy_type.lower() if proxy_type else "http"
 
         if proxy_type in _PROXY_TYPE_MAP:
             ptv = _PROXY_TYPE_MAP[proxy_type]
@@ -62,7 +62,7 @@ class Auth(object):
             ptv = socks.PROXY_TYPE_HTTP
             self.logger.info("Proxy type not found, set to 'HTTP'")
 
-        rdns = is_true(proxy_config.get('proxy_rdns'))
+        rdns = is_true(proxy_config.get("proxy_rdns"))
 
         proxy_info = ProxyInfo(
             proxy_host=url,
@@ -70,7 +70,7 @@ class Auth(object):
             proxy_type=ptv,
             proxy_user=user,
             proxy_pass=password,
-            proxy_rdns=rdns
+            proxy_rdns=rdns,
         )
         return proxy_info
 
@@ -79,7 +79,9 @@ class Auth(object):
 
 
 class OAuth(Auth):
-    def __init__(self, logger: logging.Logger, account: dict, proxy_config: dict = None) -> None:
+    def __init__(
+        self, logger: logging.Logger, account: dict, proxy_config: dict = None
+    ) -> None:
         super().__init__(logger, account)
 
         self.token_expiration = datetime.now(timezone.utc)
@@ -93,9 +95,7 @@ class OAuth(Auth):
         :return: the algorithm based on the type of key
         """
         key = serialization.load_pem_private_key(
-            key_string.encode(),
-            password=None,
-            backend=default_backend()
+            key_string.encode(), password=None, backend=default_backend()
         )
 
         self.logger.debug(f"Detected key type: {key.__class__.__name__}")
@@ -116,10 +116,10 @@ class OAuth(Auth):
         :return: formatted private key
         """
         pem_string = pem_string.strip()
-        begin_marker = "-----BEGIN PRIVATE KEY-----"
-        begin_rsa_marker = "-----BEGIN RSA PRIVATE KEY-----"
-        end_marker = "-----END PRIVATE KEY-----"
-        end_rsa_marker = "-----END RSA PRIVATE KEY-----"
+        begin_marker = "-----BEGIN PRIVATE KEY-----" # pragma: allowlist secret
+        begin_rsa_marker = "-----BEGIN RSA PRIVATE KEY-----" # pragma: allowlist secret
+        end_marker = "-----END PRIVATE KEY-----" # pragma: allowlist secret
+        end_rsa_marker = "-----END RSA PRIVATE KEY-----" # pragma: allowlist secret
 
         # Determine which type of PEM it is
         if begin_marker in pem_string and end_marker in pem_string:
@@ -138,9 +138,9 @@ class OAuth(Auth):
         body = pem_string[start_idx:end_idx]
 
         # Remove all spaces and tabs in the body
-        body_clean = body.replace(" ", "").replace("\t", "")
+        # body_clean = body.replace(" ", "").replace("\t", "")
         # Split body into lines of `line_length`
-        lines = [body[i:i+line_length] for i in range(0, len(body), line_length)]
+        lines = [body[i : i + line_length] for i in range(0, len(body), line_length)]
         body_formatted = "\n".join(lines)
         # Reassemble
         return f"{begin}\n{body_formatted}\n{end}"
@@ -170,7 +170,7 @@ class OAuth(Auth):
             "aud": auth_url,
             "iat": now,
             "exp": now + 300,
-            "jti": str(uuid.uuid4())
+            "jti": str(uuid.uuid4()),
         }
 
         self.logger.debug("Formatting the client secret...")
@@ -178,25 +178,25 @@ class OAuth(Auth):
         self.logger.debug("Getting corresponding algorithm...")
         algo = self._get_algorithm(client_secret)
         if not algo:
-            raise Exception("No algorithm found to create a jwt client assertion. \
-                Please provide an RSA or EC private key as client secret.")
+            raise Exception(
+                "No algorithm found to create a jwt client assertion. \
+                Please provide an RSA or EC private key as client secret."
+            )
 
         jwt_assertion = jwt.encode(payload, client_secret, algorithm=algo)
 
         payload = {
             "grant_type": "client_credentials",
             "client_assertion_type": "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
-            "client_assertion": jwt_assertion
+            "client_assertion": jwt_assertion,
         }
 
         # ----- REQUEST ACCESS TOKEN -----
         resp, content = self.http.request(
             auth_url,
             method="POST",
-            headers={
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            body=urlencode(payload)
+            headers={"Content-Type": "application/x-www-form-urlencoded"},
+            body=urlencode(payload),
         )
 
         # Check for any errors in response. If no error then add the content values in confInfo
@@ -206,8 +206,10 @@ class OAuth(Auth):
 
         content = json.loads(content)
 
-        self.token_expiration = datetime.now(timezone.utc) + timedelta(seconds=content['expires_in'])
-        self.token = content['access_token']
+        self.token_expiration = datetime.now(timezone.utc) + timedelta(
+            seconds=content["expires_in"]
+        )
+        self.token = content["access_token"]
         self.logger.debug(f"Token expires at {self.token_expiration}")
 
     def _refresh_token(self) -> str:
@@ -224,7 +226,7 @@ class OAuth(Auth):
         return self.token
 
     def get_header(self) -> dict:
-        return { "Authorization": f"Bearer {self.get_token()}" }
+        return {"Authorization": f"Bearer {self.get_token()}"}
 
 
 class BasicAuth(Auth):

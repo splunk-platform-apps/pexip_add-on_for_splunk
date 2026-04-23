@@ -5,13 +5,13 @@ import import_declare_test
 from solnlib import conf_manager, log
 from solnlib.conf_manager import InvalidHostnameError, InvalidPortError
 from solnlib.modular_input import checkpointer
-from solnlib.utils import is_true
 from splunklib import modularinput as smi
 from datetime import datetime, timedelta, timezone
 from pexip_client import PexipClient
 
 
 ADDON_NAME = "pexip_addon_for_splunk"
+
 
 def logger_for_input(input_name: str) -> logging.Logger:
     return log.Logs().get_logger(f"{ADDON_NAME.lower()}_{input_name}")
@@ -95,13 +95,11 @@ def stream_events(inputs: smi.InputDefinition, event_writer: smi.EventWriter):
 
             logger.debug("Requesting to fetch participants data")
             data = client.get_participants_data(
-                datetime.fromtimestamp(current_checkpoint),
-                call_directions,
-                duration
+                datetime.fromtimestamp(current_checkpoint), call_directions, duration
             )
 
             event_counter = 0
-            sourcetype = f"pexip:history:participants"
+            sourcetype = "pexip:history:participants"
             for object in data:
                 event_time_epoch = client.to_datetime(object["start_time"]).timestamp()
                 event_writer.write_event(
@@ -135,5 +133,5 @@ def stream_events(inputs: smi.InputDefinition, event_writer: smi.EventWriter):
                 logger,
                 e,
                 "IngestionError",
-                msg_before=f"Exception raised while ingesting data for input: {normalized_input_name}"
+                msg_before=f"Exception raised while ingesting data for input: {normalized_input_name}",
             )

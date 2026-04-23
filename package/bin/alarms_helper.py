@@ -5,13 +5,13 @@ import import_declare_test
 from solnlib import conf_manager, log
 from solnlib.conf_manager import InvalidHostnameError, InvalidPortError
 from solnlib.modular_input import checkpointer
-from solnlib.utils import is_true
 from splunklib import modularinput as smi
 from datetime import datetime, timedelta, timezone
 from pexip_client import PexipClient
 
 
 ADDON_NAME = "pexip_addon_for_splunk"
+
 
 def logger_for_input(input_name: str) -> logging.Logger:
     return log.Logs().get_logger(f"{ADDON_NAME.lower()}_{input_name}")
@@ -78,8 +78,8 @@ def stream_events(inputs: smi.InputDefinition, event_writer: smi.EventWriter):
             log.modular_input_start(logger, normalized_input_name)
 
             account = get_account(session_key, input_item.get("account"))
-            alarm_levels = (input_item.get("alarm_level") or "")
-            alarm_names = (input_item.get("alarm_names") or "")
+            alarm_levels = input_item.get("alarm_level") or ""
+            alarm_names = input_item.get("alarm_names") or ""
 
             logger.debug("Initializing Pexip Client")
             client = PexipClient(logger, account, proxy_config)
@@ -96,11 +96,11 @@ def stream_events(inputs: smi.InputDefinition, event_writer: smi.EventWriter):
             data = client.get_alarms(
                 datetime.fromtimestamp(current_checkpoint),
                 alarm_levels.split("|"),
-                alarm_names.split("|")
+                alarm_names.split("|"),
             )
 
             event_counter = 0
-            sourcetype = f"pexip:history:alarms"
+            sourcetype = "pexip:history:alarms"
             for object in data:
                 event_time_epoch = client.to_datetime(object["time_raised"]).timestamp()
                 try:
@@ -137,5 +137,5 @@ def stream_events(inputs: smi.InputDefinition, event_writer: smi.EventWriter):
                 logger,
                 e,
                 "IngestionError",
-                msg_before=f"Exception raised while ingesting data for input: {normalized_input_name}"
+                msg_before=f"Exception raised while ingesting data for input: {normalized_input_name}",
             )

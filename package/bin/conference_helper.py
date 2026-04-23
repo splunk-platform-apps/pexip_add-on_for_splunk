@@ -13,6 +13,7 @@ from pexip_client import PexipClient
 
 ADDON_NAME = "pexip_addon_for_splunk"
 
+
 def logger_for_input(input_name: str) -> logging.Logger:
     return log.Logs().get_logger(f"{ADDON_NAME.lower()}_{input_name}")
 
@@ -104,7 +105,7 @@ def stream_events(inputs: smi.InputDefinition, event_writer: smi.EventWriter):
                 service_types,
                 service_name,
                 duration,
-                not historical_data
+                not historical_data,
             )
 
             event_counter = 0
@@ -143,5 +144,5 @@ def stream_events(inputs: smi.InputDefinition, event_writer: smi.EventWriter):
                 logger,
                 e,
                 "IngestionError",
-                msg_before=f"Exception raised while ingesting data for input: {normalized_input_name}"
+                msg_before=f"Exception raised while ingesting data for input: {normalized_input_name}",
             )
