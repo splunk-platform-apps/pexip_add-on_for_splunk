@@ -1,4 +1,4 @@
-import import_declare_test
+import import_declare_test  # noqa: F401
 from solnlib import log
 import splunk.admin as admin
 import logging
