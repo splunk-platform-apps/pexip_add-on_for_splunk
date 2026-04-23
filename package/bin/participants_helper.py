@@ -1,7 +1,7 @@
 import json
 import logging
 
-import import_declare_test
+import import_declare_test  # noqa: F401
 from solnlib import conf_manager, log
 from solnlib.conf_manager import InvalidHostnameError, InvalidPortError
 from solnlib.modular_input import checkpointer

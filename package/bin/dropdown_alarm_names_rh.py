@@ -55,7 +55,7 @@ class DropDownAlarmNamesHandler(admin.MConfigHandler):
         )
         confInfo["TLS Certificate Chains"] = (
             "TLS Certificate Chains",
-            "tls_certificate_chains"
+            "tls_certificate_chains",
         )
         confInfo["TLS Certificate Missing"] = (
             "TLS Certificate Missing",
@@ -97,10 +97,7 @@ class DropDownAlarmNamesHandler(admin.MConfigHandler):
             "Configuration Sync Failure",
             "confuration_sync_failure",
         )
-        confInfo["Connectivity Lost"] = (
-            "Connectivity Lost",
-            "connectivity_lost"
-        )
+        confInfo["Connectivity Lost"] = ("Connectivity Lost", "connectivity_lost")
         confInfo["TLS Certificate Missing Management"] = (
             "TLS Certificate Missing Management",
             "tls_certificate_missing_management",
@@ -189,7 +186,9 @@ class DropDownAlarmNamesHandler(admin.MConfigHandler):
             "Azure Teams Connector Scheduled Scaling Failure",
             "azure_teamsconnector_scheduledscaling_failure",
         )
-        confInfo["Azure Teams Connector Scheduled Scaling Not Enough Instances Failure"] = (
+        confInfo[
+            "Azure Teams Connector Scheduled Scaling Not Enough Instances Failure"
+        ] = (
             "Azure Teams Connector Scheduled Scaling Not Enough Instances Failure",
             "azure_teamsconnector_scheduledscaling_notenoughinstances_failure",
         )
