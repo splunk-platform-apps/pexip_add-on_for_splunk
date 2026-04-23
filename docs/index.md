@@ -1,6 +1,7 @@
 ---
+slug: /
 sidebar_position: 1
-sidebar_label: "Introduction"
+title: Introduction
 ---
 
 # Pexip Add-On for Splunk
