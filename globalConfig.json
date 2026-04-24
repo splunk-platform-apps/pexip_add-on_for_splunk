@@ -686,6 +686,7 @@
             "light",
             "dark"
         ],
+        "defaultView": "inputs",
         "os-dependentLibraries": [
             {
                 "name": "cryptography",
