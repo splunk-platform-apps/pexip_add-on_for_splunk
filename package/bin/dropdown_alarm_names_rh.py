@@ -15,13 +15,15 @@ class DropDownAlarmNamesHandler(admin.MConfigHandler):
     """
 
     def setup(self):
-        # Commented code from:
-        # https://github.com/splunk/addonfactory-ucc-generator/blob/develop/tests/testdata/test_addons/package_global_config_everything/package/bin/dependent_dropdown.py
-        # https://github.com/splunk/addonfactory-ucc-generator/blob/develop/tests/testdata/test_addons/package_global_config_everything/globalConfig.json#L1150
+        """
+        If statement reported below taken from:
+        - https://github.com/splunk/addonfactory-ucc-generator/blob/develop/tests/testdata/test_addons/package_global_config_everything/package/bin/dependent_dropdown.py
+        - https://github.com/splunk/addonfactory-ucc-generator/blob/develop/tests/testdata/test_addons/package_global_config_everything/globalConfig.json#L1150
 
-        # if self.requestedAction == admin.ACTION_LIST:
-        #     # Add required args in supported args
-        #     self.supportedArgs.addReqArg("input_one_radio")
+        if self.requestedAction == admin.ACTION_LIST:
+            # Add required args in supported args
+            self.supportedArgs.addReqArg("input_one_radio")
+        """
         return
 
     def handleList(self, confInfo):

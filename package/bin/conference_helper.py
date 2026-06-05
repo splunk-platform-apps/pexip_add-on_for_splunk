@@ -85,9 +85,6 @@ def stream_events(inputs: smi.InputDefinition, event_writer: smi.EventWriter):
             service_name = input_item.get("service_name", None)
             duration = input_item.get("duration", -1)
 
-            # hostname = get_account_property(session_key, account, "hostname")
-            # auth_type = get_account_property(session_key, account, "auth_type")
-
             logger.debug("Initializing Pexip Client")
             client = PexipClient(logger, account, proxy_config)
 

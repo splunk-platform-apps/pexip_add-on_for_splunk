@@ -73,6 +73,14 @@ class PexipClient(ApiClient):
         """
         GET data via REST API.
 
+        Expected API parameters returned:
+        - next = url to next page
+        - previous = url to previous page
+        - limit = max amount of objects per page (10000 max)
+        - offset = indicates the object to start with
+        - total_count = total number of objects
+        e.g. next page: /api/admin/configuration/v1/conference_alias/?offset=20
+
         :param url: URL to call to fetch data.
         :param query_params: Query parameters to be added to the call.
         :return: List of results.
@@ -110,13 +118,6 @@ class PexipClient(ApiClient):
             url = f"{self.base_url}{next_page_url}"
 
         return items
-
-        # next = url to next page
-        # previous = url to previous page
-        # limit = max amount of objects per page (10000 max)
-        # offset = indicates the object to start with
-        # total_count = total number of objects
-        # e.g. next page: /api/admin/configuration/v1/conference_alias/?offset=20
 
     def get_conference_data(
         self,
