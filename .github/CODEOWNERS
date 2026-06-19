@@ -8,7 +8,7 @@
 #  https://help.github.com/en/articles/about-code-owners
 #
 
-* @edro15
+* @edro15 @lingy1028
 
 # Make CODEOWNERS file changes require admin approval
 /.github/CODEOWNERS @splunk-platform-apps/admins
