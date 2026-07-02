@@ -3,6 +3,6 @@
     <view name="configuration"/>
     <view name="dashboard"/>
     <view name="search"/>
-    <a href="https://splunk.github.io/pexip_add-on_for_splunk/" target="_blank">Documentation</a>
-    <a href="https://github.com/splunk/pexip_add-on_for_splunk/issues" target="_blank">Report an issue</a>
+    <a href="https://splunk-platform-apps.github.io/pexip_add-on_for_splunk/" target="_blank">Documentation</a>
+    <a href="https://github.com/splunk-platform-apps/pexip_add-on_for_splunk/issues" target="_blank">Report an issue</a>
 </nav>
