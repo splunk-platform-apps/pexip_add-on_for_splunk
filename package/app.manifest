@@ -37,7 +37,7 @@
         "releaseNotes": {
             "name": "CHANGELOG.md",
             "text": "https://github.com/splunk-platform-apps/pexip_add-on_for_splunk/blob/main/CHANGELOG.md",
-            "uri": "https://splunk-platform-apps.github.io/pexip_add-on_for_splunk/releases"
+            "uri": "https://github.com/splunk-platform-apps/pexip_add-on_for_splunk/releases"
         }
     },
     "dependencies": null,
