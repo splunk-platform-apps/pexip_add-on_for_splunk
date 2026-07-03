@@ -5,7 +5,7 @@
         "id": {
             "group": null,
             "name": "pexip_addon_for_splunk",
-            "version": "0.0.1"
+            "version": "0.0.2"
         },
         "author": [
             {

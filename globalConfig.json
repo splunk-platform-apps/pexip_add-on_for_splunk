@@ -679,7 +679,7 @@
     "meta": {
         "name": "pexip_addon_for_splunk",
         "restRoot": "pexip_addon_for_splunk",
-        "version": "0.0.1",
+        "version": "0.0.2",
         "displayName": "Pexip Add-on for Splunk",
         "schemaVersion": "0.0.10",
         "supportedThemes": [
