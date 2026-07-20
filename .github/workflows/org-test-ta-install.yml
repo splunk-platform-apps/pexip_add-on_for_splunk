@@ -7,7 +7,7 @@ on:
       - main
     types: [opened, reopened, synchronize]
     paths:
-      - package/
+      - package/**
 
 # Allow only 1 concurrent execution
 concurrency:
