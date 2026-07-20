@@ -1,0 +1,21 @@
+name: Test Splunk TA Installs
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+    types: [opened, reopened, synchronize]
+    paths:
+      - package/
+
+# Allow only 1 concurrent execution
+concurrency:
+  group: ${{ '{{' }} github.workflow {{ '}}' }}-${{ '{{' }} github.ref {{ '}}' }}
+  cancel-in-progress: true
+
+jobs:
+  call-workflow:
+    uses: splunk-platform-apps/.github/.github/workflows/reusable-test-ta-install.yml@dvr-96-finalize-test-ta-pipeline
+    with:
+      addon_name: ${{ github.event.repository.name }}
