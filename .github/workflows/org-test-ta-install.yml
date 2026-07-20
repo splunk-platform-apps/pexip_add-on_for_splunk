@@ -14,6 +14,9 @@ concurrency:
   group: ${{ '{{' }} github.workflow {{ '}}' }}-${{ '{{' }} github.ref {{ '}}' }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   call-workflow:
     uses: splunk-platform-apps/.github/.github/workflows/reusable-test-ta-install.yml@dvr-96-finalize-test-ta-pipeline
