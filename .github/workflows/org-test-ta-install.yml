@@ -21,4 +21,4 @@ jobs:
   call-workflow:
     uses: splunk-platform-apps/.github/.github/workflows/reusable-test-ta-install.yml@dvr-96-finalize-test-ta-pipeline
     with:
-      addon_name: ${{ github.event.repository.name }}
+      addon_name: pexip_addon_for_splunk
