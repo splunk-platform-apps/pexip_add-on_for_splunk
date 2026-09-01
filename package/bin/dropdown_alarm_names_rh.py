@@ -1,7 +1,8 @@
+import logging
+
 import import_declare_test  # noqa: F401
 from solnlib import log
-import splunk.admin as admin
-import logging
+from splunk import admin
 
 ADDON_NAME = "pexip_addon_for_splunk"
 logger = log.Logs().get_logger(f"{ADDON_NAME.lower()}_list_alarm_names_rh")

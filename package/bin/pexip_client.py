@@ -1,12 +1,12 @@
-import logging
-import json
+from __future__ import annotations
+
 import datetime
+import json
+import logging
+from urllib.parse import urlencode, urlparse, urlunparse
 
+from constants import HISTORY_RESOURCES, STATUS_RESOURCES
 from httplib2 import Http, ProxyInfo
-from typing import List
-from urllib.parse import urlparse, urlunparse, urlencode
-
-from constants import STATUS_RESOURCES, HISTORY_RESOURCES
 from oauth_helper import BasicAuth, OAuth
 
 
@@ -41,19 +41,21 @@ class ApiClient:
 
     def to_datetime(self, dt_string: str) -> datetime:
         format = "%Y-%m-%dT%H:%M:%S.%f"
-        return datetime.datetime.strptime(dt_string, format)
+        return datetime.datetime.strptime(dt_string, format).replace(
+            tzinfo=datetime.timezone.utc
+        )
 
-    def _get(self, url: str, query_params: dict) -> List:
+    def _get(self, url: str, query_params: dict) -> list:
         raise NotImplementedError("Please Implement this method")
 
 
 class PexipClient(ApiClient):
     http: Http = None
     proxy_info: ProxyInfo = None
-    base_url: str = str()
+    base_url: str = ""
 
     def __init__(
-        self, logger: logging.Logger, account: dict, proxy_config: dict = None
+        self, logger: logging.Logger, account: dict, proxy_config: dict | None = None
     ) -> None:
         super().__init__(logger)
         hostname = account.get("hostname")
@@ -69,7 +71,7 @@ class PexipClient(ApiClient):
         self.http = Http(proxy_info=self.proxy_info)
         self.base_url = self.ensure_https(hostname)
 
-    def _get(self, url: str, query_params: dict = {}) -> List:
+    def _get(self, url: str, query_params: dict | None = None) -> list:
         """
         GET data via REST API.
 
@@ -91,6 +93,8 @@ class PexipClient(ApiClient):
         header["Accept"] = "application/json"
 
         params = {"limit": self.results_per_page, "offset": offset}
+        if not query_params:
+            query_params = {}
         params.update(query_params)
 
         self.logger.debug(f"Request Query Parameters: {params}")
@@ -104,7 +108,7 @@ class PexipClient(ApiClient):
                 self.logger.error(
                     f"Error {response.status} occurred - {response.reason}"
                 )
-                raise Exception(f"[{response.status}] {response.reason}")
+                raise Exception(f"[{response.status}] {response.reason}")  # noqa: TRY002
 
             content = json.loads(content)
             results = content["objects"]
@@ -122,11 +126,11 @@ class PexipClient(ApiClient):
     def get_conference_data(
         self,
         start_time: datetime,
-        service_types: List = [],
-        service_name: str = None,
+        service_types: list | None = None,
+        service_name: str | None = None,
         duration: int = -1,
         active_conference_only: bool = False,
-    ) -> List:
+    ) -> list:
         """
         Get conferences data.
 
@@ -166,13 +170,16 @@ class PexipClient(ApiClient):
                 result.extend(response)
             return result
 
-        except Exception as e:
-            self.logger.error(f"Error fetching{active_txt}conferences: {str(e)}")
+        except Exception as e:  # noqa: BLE001
+            self.logger.error(f"Error fetching{active_txt}conferences: {e}")
             return []
 
     def _get_alarms(
-        self, params: dict, alarm_levels: List = [], alarm_names: List = []
-    ) -> List:
+        self,
+        params: dict,
+        alarm_levels: list | None = None,
+        alarm_names: list | None = None,
+    ) -> list:
         """
         Get alarms filtered by parameters.
 
@@ -188,6 +195,10 @@ class PexipClient(ApiClient):
         history_endpoint = f"{self.base_url}/{HISTORY_RESOURCES}"
 
         url = f"{history_endpoint}/alarm"
+        if alarm_levels is None:
+            alarm_levels = []
+        if alarm_names is None:
+            alarm_names = []
 
         try:
             if not alarm_levels:
@@ -220,12 +231,15 @@ class PexipClient(ApiClient):
 
             return result
 
-        except Exception as e:
-            raise Exception(f"Error occurred while getting alarms - {str(e)}")
+        except Exception as e:  # noqa: BLE001
+            raise Exception(f"Error occurred while getting alarms - {e}")  # noqa: TRY002
 
     def get_alarms(
-        self, from_time: datetime, alarm_levels: List = [], alarm_names: List = []
-    ) -> List:
+        self,
+        from_time: datetime,
+        alarm_levels: list | None = None,
+        alarm_names: list | None = None,
+    ) -> list:
         """
         Get alarms.
 
@@ -235,6 +249,11 @@ class PexipClient(ApiClient):
         :return: List of retrieved alarms.
         """
         result = []
+
+        if alarm_levels is None:
+            alarm_levels = []
+        if alarm_names is None:
+            alarm_names = []
 
         # Removing empty strings from lists
         alarm_levels = [x for x in alarm_levels if x.strip()]
@@ -252,8 +271,11 @@ class PexipClient(ApiClient):
         return unique_alarms
 
     def get_participants_data(
-        self, end_time: datetime, call_directions: List = [], duration: int = -1
-    ) -> List:
+        self,
+        end_time: datetime,
+        call_directions: list | None = None,
+        duration: int = -1,
+    ) -> list:
         """
         Get participants data.
 
@@ -285,6 +307,6 @@ class PexipClient(ApiClient):
                 result.extend(response)
             return result
 
-        except Exception as e:
-            self.logger.error(f"Error fetching call participants: {str(e)}")
+        except Exception as e:  # noqa: BLE001
+            self.logger.error(f"Error fetching call participants: {e}")
             return []
