@@ -1,14 +1,13 @@
 import json
 import logging
+from datetime import datetime, timedelta, timezone
 
 import import_declare_test  # noqa: F401
+from pexip_client import PexipClient
 from solnlib import conf_manager, log
 from solnlib.conf_manager import InvalidHostnameError, InvalidPortError
 from solnlib.modular_input import checkpointer
 from splunklib import modularinput as smi
-from datetime import datetime, timedelta, timezone
-from pexip_client import PexipClient
-
 
 ADDON_NAME = "pexip_addon_for_splunk"
 
@@ -94,7 +93,7 @@ def stream_events(inputs: smi.InputDefinition, event_writer: smi.EventWriter):
 
             logger.debug("Requesting to fetch conference data")
             data = client.get_alarms(
-                datetime.fromtimestamp(current_checkpoint),
+                datetime.fromtimestamp(current_checkpoint, tz=timezone.utc),
                 alarm_levels.split("|"),
                 alarm_names.split("|"),
             )
@@ -103,18 +102,15 @@ def stream_events(inputs: smi.InputDefinition, event_writer: smi.EventWriter):
             sourcetype = "pexip:history:alarms"
             for object in data:
                 event_time_epoch = client.to_datetime(object["time_raised"]).timestamp()
-                try:
-                    event_writer.write_event(
-                        smi.Event(
-                            data=json.dumps(object, ensure_ascii=False, default=str),
-                            index=input_item.get("index"),
-                            sourcetype=sourcetype,
-                            time=event_time_epoch,
-                        )
+                event_writer.write_event(
+                    smi.Event(
+                        data=json.dumps(object, ensure_ascii=False, default=str),
+                        index=input_item.get("index"),
+                        sourcetype=sourcetype,
+                        time=event_time_epoch,
                     )
-                    event_counter += 1
-                except Exception as e:
-                    raise e
+                )
+                event_counter += 1
 
             # Updating checkpoint if data was indexed to avoid losing info
             if event_counter > 0:
@@ -132,7 +128,7 @@ def stream_events(inputs: smi.InputDefinition, event_writer: smi.EventWriter):
                 account=input_item.get("account"),
             )
             log.modular_input_end(logger, normalized_input_name)
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             log.log_exception(
                 logger,
                 e,

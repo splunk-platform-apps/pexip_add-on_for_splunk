@@ -1,15 +1,14 @@
 import json
 import logging
+from datetime import datetime, timedelta, timezone
 
 import import_declare_test  # noqa: F401
+from pexip_client import PexipClient
 from solnlib import conf_manager, log
 from solnlib.conf_manager import InvalidHostnameError, InvalidPortError
 from solnlib.modular_input import checkpointer
 from solnlib.utils import is_true
 from splunklib import modularinput as smi
-from datetime import datetime, timedelta, timezone
-from pexip_client import PexipClient
-
 
 ADDON_NAME = "pexip_addon_for_splunk"
 
@@ -98,7 +97,7 @@ def stream_events(inputs: smi.InputDefinition, event_writer: smi.EventWriter):
 
             logger.debug("Requesting to fetch conference data")
             data = client.get_conference_data(
-                datetime.fromtimestamp(current_checkpoint),
+                datetime.fromtimestamp(current_checkpoint, tz=timezone.utc),
                 service_types,
                 service_name,
                 duration,
@@ -136,7 +135,7 @@ def stream_events(inputs: smi.InputDefinition, event_writer: smi.EventWriter):
                 account=input_item.get("account"),
             )
             log.modular_input_end(logger, normalized_input_name)
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             log.log_exception(
                 logger,
                 e,

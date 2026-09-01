@@ -1,16 +1,17 @@
-import json
-import jwt
-import uuid
-import logging
+from __future__ import annotations
+
 import base64
-from httplib2 import Http, ProxyInfo, socks
-from urllib.parse import urlencode
+import json
+import logging
+import uuid
 from datetime import datetime, timedelta, timezone
-from solnlib.utils import is_true
+from urllib.parse import urlencode
 
-from cryptography.hazmat.primitives import serialization
+import jwt
 from cryptography.hazmat.backends import default_backend
-
+from cryptography.hazmat.primitives import serialization
+from httplib2 import Http, ProxyInfo, socks
+from solnlib.utils import is_true
 
 # Map for available proxy type
 _PROXY_TYPE_MAP = {
@@ -23,7 +24,7 @@ if hasattr(socks, "PROXY_TYPE_HTTP_NO_TUNNEL"):
     _PROXY_TYPE_MAP["http_no_tunnel"] = socks.PROXY_TYPE_HTTP_NO_TUNNEL
 
 
-class Auth(object):
+class Auth:
     token: str = None
     token_expiration: datetime = None
 
@@ -80,7 +81,7 @@ class Auth(object):
 
 class OAuth(Auth):
     def __init__(
-        self, logger: logging.Logger, account: dict, proxy_config: dict = None
+        self, logger: logging.Logger, account: dict, proxy_config: dict | None = None
     ) -> None:
         super().__init__(logger, account)
 
@@ -178,7 +179,7 @@ class OAuth(Auth):
         self.logger.debug("Getting corresponding algorithm...")
         algo = self._get_algorithm(client_secret)
         if not algo:
-            raise Exception(
+            raise Exception(  # noqa: TRY002
                 "No algorithm found to create a jwt client assertion. \
                 Please provide an RSA or EC private key as client secret."
             )
@@ -202,7 +203,7 @@ class OAuth(Auth):
         # Check for any errors in response. If no error then add the content values in confInfo
         if resp.status != 200:
             self.logger.error(f"Error {resp.status} occurred - {resp.reason}")
-            raise
+            return
 
         content = json.loads(content)
 
