@@ -1,11 +1,11 @@
 name: Evaluate Splunk App Readiness for publication
 
 on:
+  workflow_dispatch
   # pull_request:
   #   branches:
   #     - main
   #   types: [opened, reopened, synchronize]
-  workflow_dispatch
 
 # Allow only 1 concurrent execution
 concurrency:
