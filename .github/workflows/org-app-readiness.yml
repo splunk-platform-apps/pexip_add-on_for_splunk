@@ -1,4 +1,4 @@
-name: Evaluate Splunk App Readiness for publication
+name: Evaluate Splunk App Publication Readiness
 
 on:
   push:
@@ -20,3 +20,5 @@ permissions:
 jobs:
   call-workflow:
     uses: splunk-platform-apps/.github/.github/workflows/reusable-readiness-assessment.yml@dvr-123-add-check-on-navigation
+    with:
+      repo_name: ${{ github.event.repository.name }}
