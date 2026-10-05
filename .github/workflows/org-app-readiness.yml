@@ -1,6 +1,9 @@
 name: Evaluate Splunk App Readiness for publication
 
 on:
+  push:
+    branches:
+      - 'test-readiness-pipeline'
   workflow_dispatch:
   # pull_request:
   #   branches:
