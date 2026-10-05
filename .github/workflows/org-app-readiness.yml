@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - 'test-readiness-pipeline'
+
   # pull_request:
   #   branches:
   #     - main
