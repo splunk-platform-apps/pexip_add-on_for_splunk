@@ -1,0 +1,20 @@
+name: Evaluate Splunk App Readiness for publication
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, reopened, synchronize]
+  workflow_dispatch
+
+# Allow only 1 concurrent execution
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  call-workflow:
+    uses: splunk-platform-apps/.github/.github/workflows/reusable-readiness-assessment.yml@dvr-123-add-check-on-navigation
