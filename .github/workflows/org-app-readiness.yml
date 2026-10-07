@@ -21,7 +21,7 @@ jobs:
   call-workflow:
     uses: splunk-platform-apps/.github/.github/workflows/reusable-build-appinspect-release.yml@dvr-123-add-check-on-navigation
     with:
-      repo_name: ${{ github.event.repository.name }}
+      caller-repo-name: ${{ github.event.repository.name }}
   # call-workflow:
   #   uses: splunk-platform-apps/.github/.github/workflows/reusable-readiness-assessment.yml@dvr-123-add-check-on-navigation
   #   with:
